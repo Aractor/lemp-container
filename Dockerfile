@@ -1,8 +1,8 @@
 FROM debian:latest
-MAINTAINER Poseidon's 3 Rings
-ENV APP_NAME="P3R LEMP Stack"
+MAINTAINER Aractor 'd Factor
+ENV APP_NAME="Debian LEMP Stack"
 
-WORKDIR /usr/src/P3R
+WORKDIR /usr/src/LEMP
 
 RUN apt-get update && apt-get -y install \
 	nginx \
@@ -23,6 +23,8 @@ RUN apt-get -y purge expect \
 	&& apt-get -y autoremove
 
 RUN apt-get -y install \
+	php \
+ 	php-json \
 	php-fpm \
 	php-common \
 	php-mbstring \
@@ -36,13 +38,13 @@ RUN apt-get -y install \
 	php-zip \
 	php-curl
 	
-COPY php.ini /etc/php/7.3/fpm/php.ini
+COPY php.ini /etc/php/*/fpm/php.ini
 
 COPY www/* /var/www/html/
 COPY default /etc/nginx/sites-available/
-CMD systemctl stop php7.3-fpm.service \
-	&& systemctl start php7.3-fpm.service \
-	&& systemctl enable php7.3-fpm.service \
+CMD systemctl stop php*-fpm.service \
+	&& systemctl start php*-fpm.service \
+	&& systemctl enable php*-fpm.service \
 	&& systemctl stop nginx.service \
 	&& systemctl start nginx.service \
 	&& systemctl enable nginx.service \
